@@ -1,5 +1,5 @@
 Snap={
-	sprites=[],
+	stages=[],
 	Vec=function(x,y,z){
 		this.x=x;
 		this.y=y;
@@ -46,6 +46,7 @@ Snap={
 			backdropNum:0,
 			canvas:canvas,
 			sprites:[],
+			tick:0,
 			update:function(){
 				this.canvas.getContext("2d").drawImage(this.backdrops[this.backdropNum]);
 				for(let i in this.sprites){
@@ -60,8 +61,14 @@ Snap={
 			},
 			setup:function(){
 				addEventListener("*",this.event);
+				(function loop(){
+					this.event({type:"loop",tick:this.tick});
+					this.tick++;
+					setTimeout(loop.bind(this),16);
+				})();
 			}
 		};
+		Snap.stages.push(stage);
 		return stage;
 	}
 }
