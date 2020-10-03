@@ -31,7 +31,7 @@ Snap={
 				this.parent.canvas.getContext("2d").drawImage(this.costumes[this.costumeNum]);
 			},
 			getEvent:function(event){
-				this.events[event]();
+				this.events[event.type](this,event);
 			}
 		};
 		parent.sprites.push(sprite)
@@ -45,17 +45,21 @@ Snap={
 			},
 			backdropNum:0,
 			canvas:canvas,
-			sprites:sprites,
+			sprites:[],
 			update:function(){
 				this.canvas.getContext("2d").drawImage(this.backdrops[this.backdropNum]);
 				for(let i in this.sprites){
 					this.sprites[i].update();
 				}
 			},
-			event:function(e){
+			event:function(params){
+				params.preventDefault();
 				for(let i in this.sprites){
-					this.sprites[i].getEvent(e);
+					this.sprites[i].getEvent(params);
 				}
+			},
+			setup:function(){
+				addEventListener("*",this.event);
 			}
 		};
 		return stage;
